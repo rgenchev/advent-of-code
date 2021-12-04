@@ -1,25 +1,29 @@
 class SonarSweep
-  @measurements = File.readlines('input.txt').map { |measurement| measurement.strip.to_i }
+  attr_accessor :entries
 
-  def self.number_of_measurements_larger_than_previous_measurement
-    @measurements.select.with_index do |measurement, index|
+  def initialize
+    @entries = File.readlines('input.txt').map { |entry| entry.strip.to_i }
+  end
+
+  def number_of_entries_larger_than_previous_entry
+    @entries.select.with_index do |entry, index|
       next if index == 0
 
-      measurement > @measurements[index - 1]
+      entry > @entries[index - 1]
     end.count
   end
 
-  def self.number_of_sums_larger_than_previous_sum
-    @measurements.select.with_index do |measurement, index|
-      next if @measurements[index + 2].nil?
+  def number_of_sums_larger_than_previous_sum
+    @entries.select.with_index do |entry, index|
+      next if @entries[index + 2].nil?
 
-      previous_sum = @measurements[index - 1] + @measurements[index] + @measurements[index + 1]
-      current_sum = @measurements[index] + @measurements[index + 1] + @measurements[index + 2]
+      previous_sum = @entries[index - 1] + @entries[index] + @entries[index + 1]
+      current_sum = @entries[index] + @entries[index + 1] + @entries[index + 2]
 
       current_sum > previous_sum
     end.count
   end
 end
 
-puts SonarSweep.number_of_measurements_larger_than_previous_measurement # -> 1466
-puts SonarSweep.number_of_sums_larger_than_previous_sum # -> 1491
+puts SonarSweep.new.number_of_entries_larger_than_previous_entry
+puts SonarSweep.new.number_of_sums_larger_than_previous_sum
